@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/fontawesome-free-6.5.2-web/css/all.min.css">
+</head>
+<body>
+
+    <div class="nav-background"></div>
+    <nav class="navbar navbar-expand-lg nav-bg position-sticky top-0 z-3 col-md-8 col-lg-8 mx-auto">
+        <div class="container">
+            <h5 class="navbar-brand mb-0 text-uppercase text-white">
+                <img src="images/logo-sm.png" alt="logo photo" style="max-width: 40px"> Game Reviews
+            </h5>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse small navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 menu small">
+                    <li class="nav-item"><a class="nav-link" href="#" id="mmorpg">MMORPG</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="shooter">Shooter</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="sailing">Sailing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="permadeath">Permadeath</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="superhero">Superhero</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="pixel">Pixel</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section>
+        <main class="container my-5 home" id="content">
+            <section class="position-relative">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="content">
+                    <div class="col">
+                        <div class="card">
+                            <img src="images/tarisland.jpg" class="card-img-top" alt="Tarisland">
+                            <div class="card-body">
+                                <h5 class="card-title">Tarisland</h5>
+                                <p class="card-text">A cross-platform MMORPG developed by Level Infinite.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="images/genshin-impact.jpg" class="card-img-top" alt="Genshin Impact">
+                            <div class="card-body">
+                                <h5 class="card-title">Genshin Impact</h5>
+                                <p class="card-text">If you've been looking for a game to.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="images/neverwinter.jpg" class="card-img-top" alt="Neverwinter">
+                            <div class="card-body">
+                                <h5 class="card-title">Neverwinter</h5>
+                                <p class="card-text">A free-to-play 3D action MMORPG based on the.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="images/dark-orbit-reloaded.jpg" class="card-img-top" alt="Dark Orbit Reloaded">
+                            <div class="card-body">
+                                <h5 class="card-title">Dark Orbit Reloaded</h5>
+                                <p class="card-text">A browser-based 3D space combat MMO with a massive.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </section>
+
+    <section class="details d-none">
+        <div class="container">
+            <header class="hstack justify-content-between">
+                <h1 class="text-center h3 py-4">Details Game</h1>
+                <button class="btn-close btn-close-dark" id="btnClose"></button>
+            </header>
+            <div class="row g-4" id="detailsContent"></div>
+        </div>
+    </section>
+    
+     
+
+    <div class="loading d-none">
+        <span class="loader"></span>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="js/categories.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

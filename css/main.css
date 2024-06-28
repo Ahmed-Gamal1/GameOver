@@ -1,0 +1,87 @@
+body {
+    background-color: #272b30;
+    color: #fff;
+}
+
+.nav-background {
+    background-image: url('../images/wraper.png');
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.nav-bg {
+    background-color: #3a497b;
+    border-radius: 20px;
+}
+
+.navbar-brand img {
+    margin-right: 10px;
+}
+
+.card {
+    background-color: #353a40;
+    border: none;
+    filter: grayscale(0.7);
+    transition: transform 0.5s, filter 0.5s 0.1s;
+}
+.card:hover {
+    transform: scale(1.05);
+    filter: grayscale(0);
+ }
+ 
+
+.card .card-title, .card .card-text {
+    color: black;
+}
+
+.nav-link {
+    color: #1c74d9;
+}
+
+.nav-link:hover {
+    color: #9ad4f4;
+}
+
+.loading {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background-color: #272b30e3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+ }
+ .loader {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: inline-block;
+    border-top: 4px solid #00ff9d;
+    border-right: 4px solid transparent;
+    box-sizing: border-box;
+    animation: rotation 4s linear infinite;
+    position: relative;
+ }
+ .loader::after {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border-left: 4px solid #5307ce;
+    border-bottom: 4px solid transparent;
+    animation: rotation 1s linear infinite reverse;
+ }
+ @keyframes rotation {
+    0% {
+       transform: rotate(0deg);
+    }
+    100% {
+       transform: rotate(360deg);
+    }
+ }
