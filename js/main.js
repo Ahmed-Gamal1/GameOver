@@ -1,57 +1,68 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const contentContainer = document.querySelector('#content');
-    const detailsSection = document.querySelector('.details');
-    const loadingIndicator = document.querySelector('.loading');
-    const btnClose = document.querySelector('#btnClose');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const navbar = document.querySelector('nav.navbar');
-    const apiKey = 'd08a3bd376mshca1bab9fd736a9bp1d0254jsn5c283c2e3949';
-    const apiHost = 'free-to-play-games-database.p.rapidapi.com';
+class APIHandler {
+    constructor(apiKey, apiHost) {
+        this.apiKey = apiKey;
+        this.apiHost = apiHost;
+    }
 
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const category = this.id;
-            fetchGames(category);
-        });
-    });
-
-    btnClose.addEventListener('click', function() {
-        detailsSection.classList.add('d-none');
-        contentContainer.classList.remove('d-none');
-        navbar.classList.remove('d-none');
-    });
-
-    async function fetchGames(category) {
-        loadingIndicator.classList.remove('d-none');
+    async fetchGamesByCategory(category) {
         const url = `https://free-to-play-games-database.p.rapidapi.com/api/games?category=${category}`;
         const options = {
             method: 'GET',
             headers: {
-                'x-rapidapi-key': apiKey,
-                'x-rapidapi-host': apiHost
+                'x-rapidapi-key': this.apiKey,
+                'x-rapidapi-host': this.apiHost
             }
         };
 
         try {
             const response = await fetch(url, options);
-            const data = await response.json();
-            displayGames(data);
-            loadingIndicator.classList.add('d-none');
+            return await response.json();
         } catch (error) {
             console.error('Error fetching games:', error);
-            loadingIndicator.classList.add('d-none');
+            return [];
         }
     }
 
-    function displayGames(games) {
-        contentContainer.innerHTML = '';
+    async fetchGameDetails(gameId) {
+        const url = `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': this.apiKey,
+                'x-rapidapi-host': this.apiHost
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching game details:', error);
+            return null;
+        }
+    }
+}
+
+class UIHandler {
+    constructor(contentContainer, detailsSection, loadingIndicator, navbar) {
+        this.contentContainer = contentContainer;
+        this.detailsSection = detailsSection;
+        this.loadingIndicator = loadingIndicator;
+        this.navbar = navbar;
+    }
+
+    toggleLoading(show) {
+        this.loadingIndicator.classList.toggle('d-none', !show);
+    }
+
+    displayGames(games) {
+        this.contentContainer.innerHTML = '';
         const row = document.createElement('div');
         row.classList.add('row', 'g-4'); 
 
         games.forEach(game => {
             const gameCard = document.createElement('div');
-            gameCard.classList.add('col-md-3'); 
+            gameCard.classList.add('col-md-3');
             gameCard.innerHTML = `
                 <div class="card h-100">
                     <img src="${game.thumbnail}" class="card-img-top" alt="${game.title}">
@@ -65,42 +76,20 @@ document.addEventListener("DOMContentLoaded", function() {
             row.appendChild(gameCard);
         });
 
-        contentContainer.appendChild(row);
+        this.contentContainer.appendChild(row);
 
         document.querySelectorAll('.btn-details').forEach(button => {
-            button.addEventListener('click', function() {
-                const gameId = this.getAttribute('data-id');
-                fetchGameDetails(gameId);
+            button.addEventListener('click', (event) => {
+                const gameId = event.target.getAttribute('data-id');
+                this.fetchGameDetails(gameId);
             });
         });
     }
 
-    async function fetchGameDetails(gameId) {
-        loadingIndicator.classList.remove('d-none');
-        const url = `https://free-to-play-games-database.p.rapidapi.com/api/game?id=${gameId}`;
-        const options = {
-            method: 'GET',
-            headers: {
-                'x-rapidapi-key': apiKey,
-                'x-rapidapi-host': apiHost
-            }
-        };
-
-        try {
-            const response = await fetch(url, options);
-            const data = await response.json();
-            displayGameDetails(data);
-            loadingIndicator.classList.add('d-none');
-        } catch (error) {
-            console.error('Error fetching game details:', error);
-            loadingIndicator.classList.add('d-none');
-        }
-    }
-
-    function displayGameDetails(game) {
-        navbar.classList.add('d-none'); 
-        detailsSection.querySelector('.hstack h1').textContent = game.title;
-        detailsSection.querySelector('.row').innerHTML = `
+    displayGameDetails(game) {
+        this.navbar.classList.add('d-none');
+        this.detailsSection.querySelector('.hstack h1').textContent = game.title;
+        this.detailsSection.querySelector('.row').innerHTML = `
             <div class="col-md-4">
                 <img src="${game.thumbnail}" class="img-fluid" alt="${game.title}">
             </div>
@@ -113,13 +102,65 @@ document.addEventListener("DOMContentLoaded", function() {
                     <li class="list-group-item">Developer: ${game.developer}</li>
                     <li class="list-group-item">Platform: ${game.platform}</li>
                 </ul>
-                <a href="${game.game_url}" target="_blank" class="btn btn-success mt-3 mb-3">Play Now</a> <!-- Added mb-3 for space below -->
+                <a href="${game.game_url}" target="_blank" class="btn btn-success mt-3 mb-3">Play Now</a>
             </div>
         `;
-        detailsSection.classList.remove('d-none');
-        contentContainer.classList.add('d-none');
+        this.detailsSection.classList.remove('d-none');
+        this.contentContainer.classList.add('d-none');
     }
 
-    
-    fetchGames('mmorpg');
+    closeDetails() {
+        this.detailsSection.classList.add('d-none');
+        this.contentContainer.classList.remove('d-none');
+        this.navbar.classList.remove('d-none');
+    }
+}
+
+class App {
+    constructor() {
+        this.apiHandler = new APIHandler('d08a3bd376mshca1bab9fd736a9bp1d0254jsn5c283c2e3949', 'free-to-play-games-database.p.rapidapi.com');
+        this.uiHandler = new UIHandler(
+            document.querySelector('#content'),
+            document.querySelector('.details'),
+            document.querySelector('.loading'),
+            document.querySelector('nav.navbar')
+        );
+
+        this.initializeEventListeners();
+        this.fetchGames('mmorpg');
+    }
+
+    initializeEventListeners() {
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const category = link.id;
+                this.fetchGames(category);
+            });
+        });
+
+        document.querySelector('#btnClose').addEventListener('click', () => {
+            this.uiHandler.closeDetails();
+        });
+    }
+
+    async fetchGames(category) {
+        this.uiHandler.toggleLoading(true);
+        const games = await this.apiHandler.fetchGamesByCategory(category);
+        this.uiHandler.displayGames(games);
+        this.uiHandler.toggleLoading(false);
+    }
+
+    async fetchGameDetails(gameId) {
+        this.uiHandler.toggleLoading(true);
+        const gameDetails = await this.apiHandler.fetchGameDetails(gameId);
+        if (gameDetails) {
+            this.uiHandler.displayGameDetails(gameDetails);
+        }
+        this.uiHandler.toggleLoading(false);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new App();
 });
