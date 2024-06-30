@@ -55,10 +55,10 @@ class UIHandler {
         this.loadingIndicator.classList.toggle('d-none', !show);
     }
 
-    displayGames(games) {
+    displayGames(games, fetchGameDetails) {
         this.contentContainer.innerHTML = '';
         const row = document.createElement('div');
-        row.classList.add('row', 'g-4'); 
+        row.classList.add('row', 'g-4');
 
         games.forEach(game => {
             const gameCard = document.createElement('div');
@@ -79,9 +79,9 @@ class UIHandler {
         this.contentContainer.appendChild(row);
 
         document.querySelectorAll('.btn-details').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const gameId = event.target.getAttribute('data-id');
-                this.fetchGameDetails(gameId);
+            button.addEventListener('click', function () {
+                const gameId = this.getAttribute('data-id');
+                fetchGameDetails(gameId);
             });
         });
     }
@@ -147,7 +147,7 @@ class App {
     async fetchGames(category) {
         this.uiHandler.toggleLoading(true);
         const games = await this.apiHandler.fetchGamesByCategory(category);
-        this.uiHandler.displayGames(games);
+        this.uiHandler.displayGames(games, this.fetchGameDetails.bind(this));
         this.uiHandler.toggleLoading(false);
     }
 
